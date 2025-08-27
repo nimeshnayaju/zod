@@ -5,27 +5,27 @@ import * as v from "valibot";
 import { object, string, boolean, number } from "valleys";
 
 const z3Schema = z3.object({
-  string: z3.string(),
+  string: z3.string().min(0).max(100),
   boolean: z3.boolean(),
-  number: z3.number(),
+  number: z3.number().min(0).max(100),
 });
 
 const z4Schema = z4.object({
-  string: z4.string(),
+  string: z4.string().min(0).max(100),
   boolean: z4.boolean(),
-  number: z4.number(),
+  number: z4.number().min(0).max(100),
 });
 
 const valibotSchema = v.object({
-  string: v.string(),
+  string: v.pipe(v.string(), v.minLength(0), v.maxLength(100)),
   boolean: v.boolean(),
-  number: v.number(),
+  number: v.pipe(v.number(), v.minSize(0), v.maxSize(100)),
 });
 
 const valleysSchema = object({
-  string: string(),
+  string: string({ minLength: 0, maxLength: 100 }),
   boolean: boolean(),
-  number: number(),
+  number: number({ min: 0, max: 100 }),
 });
 
 const DATA = Array.from({ length: 10_000 }, () =>

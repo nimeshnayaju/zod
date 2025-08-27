@@ -1,208 +1,203 @@
-<p align="center">
-  <img src="logo.svg" width="200px" align="center" alt="Zod logo" />
-  <h1 align="center">Zod</h1>
-  <p align="center">
-    TypeScript-first schema validation with static type inference
-    <br/>
-    by <a href="https://x.com/colinhacks">@colinhacks</a>
-  </p>
-</p>
-<br/>
+This repo is a fork of Zod's original repository. I've included [Valleys](https://github.com/nimeshnayaju/valleys) in the existing benchmarks that Zod already used to compare Zod 4 against Zod 3. Since Valleys is a newer validation library, it doesn't support all the validator types that Zod does. Therefore, only benchmarks for validators available in both libraries are tested.
 
-<p align="center">
-<a href="https://github.com/colinhacks/zod/actions?query=branch%3Amain"><img src="https://github.com/colinhacks/zod/actions/workflows/test.yml/badge.svg?event=push&branch=main" alt="Zod CI status" /></a>
-<a href="https://opensource.org/licenses/MIT" rel="nofollow"><img src="https://img.shields.io/github/license/colinhacks/zod" alt="License"></a>
-<a href="https://www.npmjs.com/package/zod" rel="nofollow"><img src="https://img.shields.io/npm/dw/zod.svg" alt="npm"></a>
-<a href="https://discord.gg/KaSRdyX2vc" rel="nofollow"><img src="https://img.shields.io/discord/893487829802418277?label=Discord&logo=discord&logoColor=white" alt="discord server"></a>
-<a href="https://github.com/colinhacks/zod" rel="nofollow"><img src="https://img.shields.io/github/stars/colinhacks/zod" alt="stars"></a>
-</p>
+## Benchmarks
 
-<div align="center">
-  <a href="https://zod.dev/api">Docs</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://discord.gg/RcG33DQJdf">Discord</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://twitter.com/colinhacks">𝕏</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://bsky.app/profile/zod.dev">Bluesky</a>
-  <br />
-</div>
-
-<br/>
-<br/>
-
-<h2 align="center">Featured sponsor: Jazz</h2>
-
-<div align="center">
-  <a href="https://jazz.tools/?utm_source=zod">
-    <picture width="85%" >
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/garden-co/jazz/938f6767e46cdfded60e50d99bf3b533f4809c68/homepage/homepage/public/Zod%20sponsor%20message.png">
-      <img alt="jazz logo" src="https://raw.githubusercontent.com/garden-co/jazz/938f6767e46cdfded60e50d99bf3b533f4809c68/homepage/homepage/public/Zod%20sponsor%20message.png" width="85%">
-    </picture>
-  </a>
-  <br/>
-  <p><sub>Learn more about <a target="_blank" rel="noopener noreferrer" href="mailto:sponsorship@colinhacks.com">featured sponsorships</a></sub></p>
-</div>
-
-<br/>
-<br/>
-<br/>
-
-### [Read the docs →](https://zod.dev/api)
-
-<br/>
-<br/>
-
-## What is Zod?
-
-Zod is a TypeScript-first validation library. Define a schema and parse some data with it. You'll get back a strongly typed, validated result.
-
-```ts
-import * as z from "zod";
-
-const User = z.object({
-  name: z.string(),
-});
-
-// some untrusted data...
-const input = {
-  /* stuff */
-};
-
-// the parsed result is validated and type safe!
-const data = User.parse(input);
-
-// so you can use it with confidence :)
-console.log(data.name);
-```
-
-<br/>
-
-## Features
-
-- Zero external dependencies
-- Works in Node.js and all modern browsers
-- Tiny: `2kb` core bundle (gzipped)
-- Immutable API: methods return a new instance
-- Concise interface
-- Works with TypeScript and plain JS
-- Built-in JSON Schema conversion
-- Extensive ecosystem
-
-<br/>
-
-## Installation
+You can run these benchmarks yourself in the repo:
 
 ```sh
-npm install zod
+$ git clone git@github.com:nimeshnayaju/zod.git
+$ cd zod
+$ pnpm install
 ```
 
-<br/>
+Then, to run a particular benchmark:
 
-## Basic usage
-
-Before you can do anything else, you need to define a schema. For the purposes of this guide, we'll use a simple object schema.
-
-```ts
-import * as z from "zod";
-
-const Player = z.object({
-  username: z.string(),
-  xp: z.number(),
-});
+```sh
+$ pnpm bench <name>
 ```
 
-### Parsing data
+### 1.7x faster string parsing vs Zod 4
 
-Given any Zod schema, use `.parse` to validate an input. If it's valid, Zod returns a strongly-typed _deep clone_ of the input.
+```sh
+$ pnpm bench string
+runtime: node v22.12.0 (arm64-darwin)
 
-```ts
-Player.parse({ username: "billie", xp: 100 });
-// => returns { username: "billie", xp: 100 }
+benchmark      time (avg)             (min … max)       p75       p99      p999
+------------------------------------------------- -----------------------------
+• z.string().parse
+------------------------------------------------- -----------------------------
+zod3          322 µs/iter       (262 µs … 705 µs)    346 µs    480 µs    594 µs
+zod4       23'814 ns/iter    (20'041 ns … 220 µs) 23'584 ns 71'125 ns 94'083 ns
+valleys    14'024 ns/iter    (12'250 ns … 261 µs) 13'292 ns 64'500 ns 75'958 ns
+
+summary for z.string().parse
+  valleys
+   1.7x faster than zod4
+   22.95x faster than zod3
 ```
 
-**Note** — If your schema uses certain asynchronous APIs like `async` [refinements](#refine) or [transforms](#transform), you'll need to use the `.parseAsync()` method instead.
+### 34x faster string (with min and max length rule) parsing vs Zod 4
 
-```ts
-const schema = z.string().refine(async (val) => val.length <= 8);
+```sh
+$ pnpm bench string-with-rules
+runtime: node v22.12.0 (arm64-darwin)
 
-await schema.parseAsync("hello");
-// => "hello"
+benchmark      time (avg)             (min … max)       p75       p99      p999
+------------------------------------------------- -----------------------------
+• z.string().parse
+------------------------------------------------- -----------------------------
+zod3          398 µs/iter       (297 µs … 612 µs)    417 µs    542 µs    609 µs
+zod4          632 µs/iter       (572 µs … 872 µs)    638 µs    788 µs    834 µs
+valleys    18'232 ns/iter    (14'916 ns … 332 µs) 15'958 ns 74'541 ns    164 µs
+
+summary for z.string().parse
+  valleys
+   21.82x faster than zod3
+   34.68x faster than zod4
 ```
 
-### Handling errors
+### 1.5x faster number parsing vs Zod 4
 
-When validation fails, the `.parse()` method will throw a `ZodError` instance with granular information about the validation issues.
+```sh
+$ pnpm bench number
+runtime: node v22.12.0 (arm64-darwin)
 
-```ts
-try {
-  Player.parse({ username: 42, xp: "100" });
-} catch (err) {
-  if (err instanceof z.ZodError) {
-    err.issues;
-    /* [
-      {
-        expected: 'string',
-        code: 'invalid_type',
-        path: [ 'username' ],
-        message: 'Invalid input: expected string'
-      },
-      {
-        expected: 'number',
-        code: 'invalid_type',
-        path: [ 'xp' ],
-        message: 'Invalid input: expected number'
-      }
-    ] */
-  }
-}
+benchmark      time (avg)             (min … max)       p75       p99      p999
+------------------------------------------------- -----------------------------
+• z.number().parse
+------------------------------------------------- -----------------------------
+zod3          356 µs/iter       (316 µs … 618 µs)    368 µs    470 µs    541 µs
+zod4       34'979 ns/iter    (24'375 ns … 229 µs) 28'500 ns    102 µs    171 µs
+valleys    23'098 ns/iter    (20'417 ns … 218 µs) 22'167 ns 89'750 ns    119 µs
+
+summary for z.number().parse
+  valleys
+   1.51x faster than zod4
+   15.42x faster than zod3
 ```
 
-To avoid a `try/catch` block, you can use the `.safeParse()` method to get back a plain result object containing either the successfully parsed data or a `ZodError`. The result type is a [discriminated union](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions), so you can handle both cases conveniently.
+### 18x faster number (with min and max value rule) parsing vs Zod 4
 
-```ts
-const result = Player.safeParse({ username: 42, xp: "100" });
-if (!result.success) {
-  result.error; // ZodError instance
-} else {
-  result.data; // { username: string; xp: number }
-}
+```sh
+$ pnpm bench number-with-rules
+runtime: node v22.12.0 (arm64-darwin)
+
+benchmark      time (avg)             (min … max)       p75       p99      p999
+------------------------------------------------- -----------------------------
+• z.number().parse
+------------------------------------------------- -----------------------------
+zod3          365 µs/iter       (316 µs … 705 µs)    385 µs    479 µs    572 µs
+zod4          491 µs/iter       (454 µs … 849 µs)    491 µs    602 µs    651 µs
+valleys    27'116 ns/iter    (23'292 ns … 217 µs) 24'500 ns    107 µs    128 µs
+
+summary for z.number().parse
+  valleys
+   13.44x faster than zod3
+   18.12x faster than zod4
 ```
 
-**Note** — If your schema uses certain asynchronous APIs like `async` [refinements](#refine) or [transforms](#transform), you'll need to use the `.safeParseAsync()` method instead.
+### 2.2x faster array (of string) parsing vs Zod 4
 
-```ts
-const schema = z.string().refine(async (val) => val.length <= 8);
+```sh
+$ pnpm bench array-of-string
+runtime: node v22.12.0 (arm64-darwin)
 
-await schema.safeParseAsync("hello");
-// => { success: true; data: "hello" }
+benchmark      time (avg)             (min … max)       p75       p99      p999
+------------------------------------------------- -----------------------------
+• z.array() parsing
+------------------------------------------------- -----------------------------
+zod3          220 µs/iter     (139 µs … 1'812 µs)    162 µs  1'187 µs  1'760 µs
+zod4       18'329 ns/iter    (16'917 ns … 637 µs) 17'792 ns 39'250 ns    109 µs
+valleys     8'233 ns/iter     (7'708 ns … 148 µs)  8'167 ns 10'500 ns 19'625 ns
+
+summary for z.array() parsing
+  valleys
+   2.23x faster than zod4
+   26.67x faster than zod3
 ```
 
-### Inferring types
+### 20x faster array (of string with min and max length rule) parsing vs Zod 4
 
-Zod infers a static type from your schema definitions. You can extract this type with the `z.infer<>` utility and use it however you like.
+```sh
+$ pnpm bench array-of-string-with-rules
+runtime: node v22.12.0 (arm64-darwin)
 
-```ts
-const Player = z.object({
-  username: z.string(),
-  xp: z.number(),
-});
+benchmark      time (avg)             (min … max)       p75       p99      p999
+------------------------------------------------- -----------------------------
+• z.array() parsing
+------------------------------------------------- -----------------------------
+zod3          229 µs/iter     (147 µs … 1'805 µs)    169 µs  1'237 µs  1'697 µs
+zod4          168 µs/iter     (149 µs … 1'283 µs)    162 µs    350 µs  1'208 µs
+valleys     8'238 ns/iter     (7'666 ns … 158 µs)  8'167 ns 10'625 ns 20'916 ns
 
-// extract the inferred type
-type Player = z.infer<typeof Player>;
-
-// use it in your code
-const player: Player = { username: "billie", xp: 100 };
+summary for z.array() parsing
+  valleys
+   20.39x faster than zod4
+   27.74x faster than zod3
 ```
 
-In some cases, the input & output types of a schema can diverge. For instance, the `.transform()` API can convert the input from one type to another. In these cases, you can extract the input and output types independently:
+### 1.7x slower object (containing primitive values) parsing vs Zod 4
 
-```ts
-const mySchema = z.string().transform((val) => val.length);
+```sh
+$ pnpm bench object
+runtime: node v22.12.0 (arm64-darwin)
 
-type MySchemaIn = z.input<typeof mySchema>;
-// => string
+benchmark      time (avg)             (min … max)       p75       p99      p999
+------------------------------------------------- -----------------------------
+• z.object().parse
+------------------------------------------------- -----------------------------
+zod3        2'394 µs/iter   (2'273 µs … 2'814 µs)  2'421 µs  2'593 µs  2'814 µs
+zod4          307 µs/iter       (276 µs … 531 µs)    304 µs    410 µs    469 µs
+valibot     1'676 µs/iter   (1'580 µs … 1'854 µs)  1'700 µs  1'826 µs  1'854 µs
+valleys       530 µs/iter       (498 µs … 711 µs)    529 µs    629 µs    689 µs
 
-type MySchemaOut = z.output<typeof mySchema>; // equivalent to z.infer<typeof mySchema>
-// number
+summary for z.object().parse
+  zod4
+   1.73x faster than valleys
+   5.45x faster than valibot
+   7.79x faster than zod3
+```
+
+### 2.5x faster object (containing primitives values with min and max rule) parsing vs Zod 4
+
+```sh
+$ pnpm bench object-with-rules
+runtime: node v22.12.0 (arm64-darwin)
+
+benchmark      time (avg)             (min … max)       p75       p99      p999
+------------------------------------------------- -----------------------------
+• z.object().parse
+------------------------------------------------- -----------------------------
+zod3        2'578 µs/iter   (2'372 µs … 3'323 µs)  2'634 µs  3'140 µs  3'323 µs
+zod4        1'267 µs/iter   (1'147 µs … 1'563 µs)  1'302 µs  1'493 µs  1'563 µs
+valibot     2'712 µs/iter   (2'434 µs … 5'983 µs)  2'744 µs  4'137 µs  5'983 µs
+valleys       492 µs/iter     (448 µs … 1'040 µs)    501 µs    686 µs    976 µs
+
+summary for z.object().parse
+  valleys
+   2.57x faster than zod4
+   5.23x faster than zod3
+   5.51x faster than valibot
+```
+
+### 2.2x faster nested object (containing primitives values with min and max rule) parsing vs Zod 4
+
+```sh
+$ pnpm bench nested-object
+runtime: node v22.12.0 (arm64-darwin)
+
+benchmark      time (avg)             (min … max)       p75       p99      p999
+------------------------------------------------- -----------------------------
+• z.object().parse
+------------------------------------------------- -----------------------------
+zod3        6'423 µs/iter   (6'186 µs … 7'005 µs)  6'504 µs  7'005 µs  7'005 µs
+zod4        2'097 µs/iter   (1'949 µs … 2'507 µs)  2'148 µs  2'371 µs  2'507 µs
+valibot     3'691 µs/iter   (3'496 µs … 4'074 µs)  3'779 µs  4'050 µs  4'074 µs
+valleys       945 µs/iter     (860 µs … 1'210 µs)    978 µs  1'109 µs  1'210 µs
+
+summary for z.object().parse
+  valleys
+   2.22x faster than zod4
+   3.9x faster than valibot
+   6.79x faster than zod3
 ```

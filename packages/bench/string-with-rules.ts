@@ -2,8 +2,8 @@ import { makeData, makeSchema } from "./benchUtil.js";
 import { string } from "valleys";
 import { metabench } from "./metabench.js";
 
-const { zod3, zod4 } = makeSchema((z) => z.string());
-const validator = string();
+const { zod3, zod4 } = makeSchema((z) => z.string().min(0).max(100));
+const validator = string({ minLength: 0, maxLength: 100 });
 
 const DATA = makeData(10000, () => `${Math.random()}`);
 const bench = metabench("z.string().parse", {

@@ -5,6 +5,7 @@
     "extendedDiagnostics": true,
     "traceResolution": true,
     "customConditions": ["@zod/source"],
+    "moduleResolution": "bundler",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "types": ["node"]

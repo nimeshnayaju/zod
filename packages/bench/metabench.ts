@@ -88,6 +88,8 @@ class Tinybench extends Metabench {
     console.log();
     console.log(`   benchmarking ${chalk.bold.white(this.name)} with ${chalk.bold.white(this.runner)}`);
 
+    // console.log(Object.entries(this.benchmarks))
+
     bench.addEventListener("cycle", (e) => {
       const task = e.task?.result;
       if (!task) throw new Error("Task has no result");

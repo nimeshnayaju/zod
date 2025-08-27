@@ -1,12 +1,12 @@
 import { makeData, makeSchema } from "./benchUtil.js";
-import { string } from "valleys";
+import { number } from "valleys";
 import { metabench } from "./metabench.js";
 
-const { zod3, zod4 } = makeSchema((z) => z.string());
-const validator = string();
+const { zod3, zod4 } = makeSchema((z) => z.number().min(0).max(100));
+const validator = number({ min: 0, max: 100 });
 
-const DATA = makeData(10000, () => `${Math.random()}`);
-const bench = metabench("z.string().parse", {
+const DATA = makeData(10000, () => Math.random());
+const bench = metabench("z.number().parse", {
   zod3() {
     for (const _ of DATA) zod3.parse(_);
   },
