@@ -5,6 +5,7 @@
   "devDependencies": {
     "arktype": "^2.1.19",
     "valibot": "^1.0.0",
+    "valleys": "^0.0.3",
     "zod": "workspace:*",
     "zod3": "npm:zod@~3.24.0",
     "zod4": "npm:zod@4.0.8"
