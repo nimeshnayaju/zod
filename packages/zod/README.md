@@ -136,7 +136,7 @@ summary for z.array() parsing
    27.74x faster than zod3
 ```
 
-### 1.7x slower object (containing primitive values) parsing vs Zod 4
+### 1.31x slower object (containing primitive values) parsing vs Zod 4
 
 ```sh
 $ pnpm bench object
@@ -158,7 +158,7 @@ summary for z.object().parse
    11.43x faster than zod3
 ```
 
-### 2.5x faster object (containing primitives values with min and max rule) parsing vs Zod 4
+### 3.2x faster object (containing primitives values with min and max rule) parsing vs Zod 4
 
 ```sh
 $ pnpm bench object-with-rules
@@ -180,7 +180,7 @@ summary for z.object().parse
    7.17x faster than valibot
 ```
 
-### 2.2x faster nested object (containing primitives values with min and max rule) parsing vs Zod 4
+### 3.2x faster nested object (containing primitives values with min and max rule) parsing vs Zod 4
 
 ```sh
 $ pnpm bench nested-object
