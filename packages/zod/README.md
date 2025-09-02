@@ -146,16 +146,16 @@ benchmark      time (avg)             (min … max)       p75       p99      p99
 ------------------------------------------------- -----------------------------
 • z.object().parse
 ------------------------------------------------- -----------------------------
-zod3        2'394 µs/iter   (2'273 µs … 2'814 µs)  2'421 µs  2'593 µs  2'814 µs
-zod4          307 µs/iter       (276 µs … 531 µs)    304 µs    410 µs    469 µs
-valibot     1'676 µs/iter   (1'580 µs … 1'854 µs)  1'700 µs  1'826 µs  1'854 µs
-valleys       530 µs/iter       (498 µs … 711 µs)    529 µs    629 µs    689 µs
+zod3        3'283 µs/iter   (2'468 µs … 5'419 µs)  3'784 µs  5'378 µs  5'419 µs
+zod4          287 µs/iter       (251 µs … 624 µs)    296 µs    380 µs    491 µs
+valibot     1'658 µs/iter   (1'611 µs … 1'830 µs)  1'701 µs  1'785 µs  1'830 µs
+valleys       376 µs/iter       (347 µs … 592 µs)    372 µs    500 µs    580 µs
 
 summary for z.object().parse
   zod4
-   1.73x faster than valleys
-   5.45x faster than valibot
-   7.79x faster than zod3
+   1.31x faster than valleys
+   5.77x faster than valibot
+   11.43x faster than zod3
 ```
 
 ### 2.5x faster object (containing primitives values with min and max rule) parsing vs Zod 4
@@ -168,16 +168,16 @@ benchmark      time (avg)             (min … max)       p75       p99      p99
 ------------------------------------------------- -----------------------------
 • z.object().parse
 ------------------------------------------------- -----------------------------
-zod3        2'578 µs/iter   (2'372 µs … 3'323 µs)  2'634 µs  3'140 µs  3'323 µs
-zod4        1'267 µs/iter   (1'147 µs … 1'563 µs)  1'302 µs  1'493 µs  1'563 µs
-valibot     2'712 µs/iter   (2'434 µs … 5'983 µs)  2'744 µs  4'137 µs  5'983 µs
-valleys       492 µs/iter     (448 µs … 1'040 µs)    501 µs    686 µs    976 µs
+zod3        2'522 µs/iter   (2'345 µs … 7'433 µs)  2'475 µs  7'389 µs  7'433 µs
+zod4        1'218 µs/iter   (1'154 µs … 1'398 µs)  1'236 µs  1'348 µs  1'398 µs
+valibot     2'726 µs/iter   (2'589 µs … 2'962 µs)  2'773 µs  2'956 µs  2'962 µs
+valleys       380 µs/iter       (348 µs … 589 µs)    396 µs    493 µs    543 µs
 
 summary for z.object().parse
   valleys
-   2.57x faster than zod4
-   5.23x faster than zod3
-   5.51x faster than valibot
+   3.2x faster than zod4
+   6.63x faster than zod3
+   7.17x faster than valibot
 ```
 
 ### 2.2x faster nested object (containing primitives values with min and max rule) parsing vs Zod 4
@@ -190,14 +190,14 @@ benchmark      time (avg)             (min … max)       p75       p99      p99
 ------------------------------------------------- -----------------------------
 • z.object().parse
 ------------------------------------------------- -----------------------------
-zod3        6'423 µs/iter   (6'186 µs … 7'005 µs)  6'504 µs  7'005 µs  7'005 µs
-zod4        2'097 µs/iter   (1'949 µs … 2'507 µs)  2'148 µs  2'371 µs  2'507 µs
-valibot     3'691 µs/iter   (3'496 µs … 4'074 µs)  3'779 µs  4'050 µs  4'074 µs
-valleys       945 µs/iter     (860 µs … 1'210 µs)    978 µs  1'109 µs  1'210 µs
+zod3       10'007 µs/iter  (8'515 µs … 13'262 µs) 10'680 µs 13'262 µs 13'262 µs
+zod4        2'022 µs/iter   (1'913 µs … 2'298 µs)  2'057 µs  2'255 µs  2'298 µs
+valibot     3'552 µs/iter   (3'416 µs … 3'836 µs)  3'587 µs  3'813 µs  3'836 µs
+valleys       632 µs/iter       (586 µs … 829 µs)    642 µs    800 µs    825 µs
 
 summary for z.object().parse
   valleys
-   2.22x faster than zod4
-   3.9x faster than valibot
-   6.79x faster than zod3
+   3.2x faster than zod4
+   5.62x faster than valibot
+   15.85x faster than zod3
 ```

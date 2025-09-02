@@ -117,8 +117,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0(typescript@5.9.2)
       valleys:
-        specifier: ^0.0.3
-        version: 0.0.3
+        specifier: ^0.0.5
+        version: 0.0.5
       zod:
         specifier: workspace:*
         version: link:../zod
@@ -5537,8 +5537,8 @@ packages:
     resolution: {integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  valleys@0.0.3:
-    resolution: {integrity: sha512-/IRuIl8CU0/StF7vPFVARX+R0lzZ960O1FX3DojISLWdygf/Oa7MZMLy8fzn9cBdmGmifdq9SFtbwjvNXI5Gmw==}
+  valleys@0.0.5:
+    resolution: {integrity: sha512-JWTFvORLZoJSWpAo/ZNDm57eRqrD/C31nRfWx+ms1/Isk/ERSUWWeD1MudRak/yRzXfk771for55c/X5P4o6dA==}
     engines: {node: '>=18'}
 
   vfile-location@5.0.3:
@@ -11276,7 +11276,7 @@ snapshots:
 
   validate-npm-package-name@5.0.1: {}
 
-  valleys@0.0.3: {}
+  valleys@0.0.5: {}
 
   vfile-location@5.0.3:
     dependencies:
